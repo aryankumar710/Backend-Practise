@@ -3,10 +3,12 @@ import connectDB from "./db/index.js";
 import { app } from "./app.js";
 
 
-dotenv.config({
-  path: "/.env",
-});
 
+dotenv.config(
+  {
+    path: './.env'
+  }
+)
 
 
 connectDB()
@@ -15,12 +17,15 @@ connectDB()
       console.log(error);
     });
 
-    app.listen(process.env.PORT || 8000, () => {
+    console.log("PORT VALUE:", process.env.PORT);
+
+    app.listen(process.env.PORT , () => {
       console.log(`App is listning to the port ${process.env.PORT}`);
     });
   })
   .catch((err) => {
     console.error(err);
+    console.log("DB connection failed", err);
   });
 
 /*

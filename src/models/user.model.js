@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import { jwt } from "jsonwebtoken";
+import pkg from 'jsonwebtoken';
+const { jwt } = pkg;
 
 const UserSchema = mongoose.Schema(
   {
@@ -13,7 +14,7 @@ const UserSchema = mongoose.Schema(
       index: true,
     },
 
-    gmail: {
+    email: {
       type: String,
       required: true,
       unique: true,
@@ -39,7 +40,7 @@ const UserSchema = mongoose.Schema(
 
     watchHistory: [
       {
-        type: Schema.Type.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Video",
       },
     ],
@@ -58,9 +59,9 @@ const UserSchema = mongoose.Schema(
   }
 );
 
-UserSchema.pre("save", async function (next) {
-  this.password = bcrypt.hash(this.password, 10);
-  next();
+UserSchema.pre("save", async function () {
+  this.password = await bcrypt.hash(this.password, 10);
+  
 });
 
 UserSchema.methods.isPasswordCorrect = async function (password) {
@@ -82,7 +83,7 @@ UserSchema.methods.generateAccessToken = function () {
   );
 };
 
-UserSchema.methods.generateAccessToken = function () {
+UserSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
       _id: this._id,
