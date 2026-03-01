@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import pkg from 'jsonwebtoken';
+import pkg from "jsonwebtoken";
 const { jwt } = pkg;
 
 const UserSchema = mongoose.Schema(
@@ -61,7 +61,6 @@ const UserSchema = mongoose.Schema(
 
 UserSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, 10);
-  
 });
 
 UserSchema.methods.isPasswordCorrect = async function (password) {
